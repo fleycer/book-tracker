@@ -1,17 +1,16 @@
 package com.fleycer.booktracker.entities;
 
 import com.fleycer.booktracker.enums.ReadingStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 @Entity
 @Table(name = "Book")
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-public class Book {
+@NoArgsConstructor @AllArgsConstructor @Data
+public class Book implements Model{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +28,11 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
+
+    public Book(String author, String name, ReadingStatus readingStatus, Genre genre) {
+        this.author = author;
+        this.name = name;
+        this.readingStatus = readingStatus;
+        this.genre = genre;
+    }
 }
