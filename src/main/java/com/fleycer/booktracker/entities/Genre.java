@@ -1,16 +1,15 @@
 package com.fleycer.booktracker.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "Genre")
-@NoArgsConstructor @AllArgsConstructor @Data
-public class Genre implements Model{
+@NoArgsConstructor @AllArgsConstructor  @Getter  @Setter
+public class Genre {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +18,7 @@ public class Genre implements Model{
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "genre")
     private List<Book> books;
 

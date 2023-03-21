@@ -1,16 +1,14 @@
 package com.fleycer.booktracker.entities;
 
 import com.fleycer.booktracker.enums.ReadingStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Book")
-@NoArgsConstructor @AllArgsConstructor @Data
-public class Book implements Model{
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter
+public class Book {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,7 @@ package com.fleycer.booktracker.controllers;
 
 import com.fleycer.booktracker.dto.GenreDTO;
 import com.fleycer.booktracker.repositories.GenreRepository;
+import com.fleycer.booktracker.servecies.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/genre")
 public class GenreController {
-    private final GenreRepository genreRepository;
-
+    private final GenreService genreService;
     @Autowired
-    public GenreController(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
+    public GenreController(GenreService genreService) {
+        this.genreService = genreService;
     }
 
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> addGenre(@RequestBody GenreDTO genreDTO){
-        genreRepository.save(genreDTO.convertToModel());
+        genreService.addGenre(genreDTO.convertToModel());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
