@@ -1,7 +1,6 @@
 package com.fleycer.booktracker.controllers;
 
 import com.fleycer.booktracker.dto.GenreDTO;
-import com.fleycer.booktracker.repositories.GenreRepository;
 import com.fleycer.booktracker.servecies.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

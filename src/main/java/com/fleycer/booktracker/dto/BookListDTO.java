@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Data
 public class BookListDTO implements DTO<List<Book>> {
-    List<BookDTO> books;
+    private List<BookDTO> books;
 
     public BookListDTO(List<Book> books) {
         this.books = books.stream().map(b -> new BookDTO(b)).collect(Collectors.toList());

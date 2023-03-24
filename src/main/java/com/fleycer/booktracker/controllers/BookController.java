@@ -3,23 +3,20 @@ package com.fleycer.booktracker.controllers;
 import com.fleycer.booktracker.dto.BookDTO;
 import com.fleycer.booktracker.dto.BookListDTO;
 import com.fleycer.booktracker.entities.Book;
+import com.fleycer.booktracker.enums.ReadingStatus;
 import com.fleycer.booktracker.servecies.BookService;
 import com.fleycer.booktracker.util.ErrorUtil;
 import com.fleycer.booktracker.util.exceptions.BookException;
-import com.fleycer.booktracker.util.ErrorResponse;
-import com.fleycer.booktracker.util.exceptions.GenreException;
 import com.fleycer.booktracker.util.validators.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
     private final BookValidator bookValidator;
@@ -30,16 +27,27 @@ public class BookController {
         this.bookValidator = bookValidator;
     }
 
-    @GetMapping("/find")
-    public BookListDTO findBookByName(@RequestParam(value = "name") String name){
+    @GetMapping("/all")
+    public ResponseEntity<BookListDTO> index(){
+        List<Book> books = bookService.findAll();
+        return new ResponseEntity<>(new BookListDTO(books), HttpStatus.OK) ;
+    }
+
+    @GetMapping("/findby/name")
+    public ResponseEntity<BookListDTO> findBooksByName(@RequestParam(value = "param") String name){
         List<Book> books = bookService.findByName(name);
-        return new BookListDTO(books);
+        return new ResponseEntity<>(new BookListDTO(books), HttpStatus.OK) ;
+    }
+
+    @GetMapping("/findby/status")
+    public ResponseEntity<BookListDTO> findBooksByReadingStatus(@RequestParam(value = "param") ReadingStatus readingStatus){
+        List<Book> books = bookService.findByReadingStatus(readingStatus);
+        return new ResponseEntity<>(new BookListDTO(books), HttpStatus.OK) ;
     }
 
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> addBook(@RequestBody BookDTO bookDTO, BindingResult bindingResult){
         Book book = bookDTO.convertToModel();
-
         bookValidator.validate(book,bindingResult);
 
         if(bindingResult.hasErrors()){
@@ -49,17 +57,5 @@ public class BookController {
         bookService.saveBook(bookDTO.convertToModel());
 
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(BookException bookException){
-        ErrorResponse errorResponse = new ErrorResponse(bookException.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(GenreException genreException){
-        ErrorResponse errorResponse = new ErrorResponse(genreException.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

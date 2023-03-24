@@ -24,7 +24,7 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Book book = (Book)target;
-        //For one author can be only one unique book name. Check this
+        //For one author can be only one unique book name. Check it
         boolean isThereSimilarBookNameForAuthor = bookService.findByAuthor(book.getAuthor()).stream()
                 .anyMatch(b -> b.getName().equals(book.getName()));
         if(isThereSimilarBookNameForAuthor){

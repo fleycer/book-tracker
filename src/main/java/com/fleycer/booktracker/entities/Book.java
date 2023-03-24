@@ -2,7 +2,6 @@ package com.fleycer.booktracker.entities;
 
 import com.fleycer.booktracker.enums.ReadingStatus;
 import lombok.*;
-
 import javax.persistence.*;
 
 @Entity

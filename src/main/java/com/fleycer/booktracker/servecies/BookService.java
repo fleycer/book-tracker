@@ -2,13 +2,13 @@ package com.fleycer.booktracker.servecies;
 
 import com.fleycer.booktracker.entities.Book;
 import com.fleycer.booktracker.entities.Genre;
+import com.fleycer.booktracker.enums.ReadingStatus;
 import com.fleycer.booktracker.repositories.BookRepository;
 import com.fleycer.booktracker.repositories.GenreRepository;
 import com.fleycer.booktracker.util.exceptions.GenreException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -28,6 +28,16 @@ public class BookService {
 
     public List<Book> findByAuthor(String author) {
         List<Book> books = bookRepository.findByAuthor(author);
+        return books;
+    }
+
+    public List<Book> findByReadingStatus(ReadingStatus readingStatus){
+        List<Book> books = bookRepository.findByReadingStatus(readingStatus);
+        return books;
+    }
+
+    public List<Book> findAll(){
+        List<Book> books = bookRepository.findAll();
         return books;
     }
 
