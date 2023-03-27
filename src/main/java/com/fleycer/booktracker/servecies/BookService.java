@@ -5,6 +5,7 @@ import com.fleycer.booktracker.entities.Genre;
 import com.fleycer.booktracker.enums.ReadingStatus;
 import com.fleycer.booktracker.repositories.BookRepository;
 import com.fleycer.booktracker.repositories.GenreRepository;
+import com.fleycer.booktracker.util.exceptions.BookNotFoundException;
 import com.fleycer.booktracker.util.exceptions.GenreException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class BookService {
     public BookService(BookRepository bookRepository, GenreRepository genreRepository) {
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
+    }
+
+    public Book findById(long id){
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book is not found for this id"));
     }
     public List<Book> findByName(String name) {
         List<Book> books = bookRepository.findByName(name);
@@ -46,6 +51,21 @@ public class BookService {
         Genre genre = genreRepository
                 .findByName(book.getGenre().getName())
                 .orElseThrow(()-> new GenreException("Genre is not found in data base for the book"));
+        book.setGenre(genre);
+        bookRepository.save(book);
+    }
+
+    @Transactional
+    public void updateBook(Long id, Book book) throws BookNotFoundException, GenreException {
+        Book bookForUpdate = findById(id);
+        Genre genre = genreRepository
+                .findByName(book.getGenre().getName())
+                .orElseThrow(()-> new GenreException("Genre is not found in data base for the book"));
+
+        bookForUpdate.setName(book.getName());
+        bookForUpdate.setAuthor(book.getAuthor());
+        bookForUpdate.setReadingStatus(book.getReadingStatus());
+        bookForUpdate.setGenre(genre);
         book.setGenre(genre);
         bookRepository.save(book);
     }

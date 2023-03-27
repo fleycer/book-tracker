@@ -58,4 +58,20 @@ public class BookController {
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpStatus> updateBook(@PathVariable Long id,
+                                                 @RequestBody BookDTO bookDTO,
+                                                 BindingResult bindingResult){
+        Book book = bookDTO.convertToModel();
+        bookValidator.validate(book,bindingResult);
+
+        if(bindingResult.hasErrors()){
+            throw new BookException(ErrorUtil.bindingResultErrorsToString(bindingResult));
+        }
+
+        bookService.updateBook(id, bookDTO.convertToModel());
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
