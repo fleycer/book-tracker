@@ -67,6 +67,12 @@ public class BookService {
         bookForUpdate.setReadingStatus(book.getReadingStatus());
         bookForUpdate.setGenre(genre);
         book.setGenre(genre);
-        bookRepository.save(book);
+        bookRepository.save(bookForUpdate);
+    }
+
+    @Transactional
+    public void deleteBook(Long id){
+        Book bookForUpdate = findById(id);
+        bookRepository.delete(bookForUpdate);
     }
 }
