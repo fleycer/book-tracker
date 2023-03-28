@@ -48,9 +48,14 @@ public class BookService {
 
     @Transactional
     public void saveBook(Book book) throws GenreException {
-        Genre genre = genreRepository
-                .findByName(book.getGenre().getName())
-                .orElseThrow(()-> new GenreException("Genre is not found in data base for the book"));
+        Genre genre = book.getGenre();
+
+        if(book.getGenre() != null){
+            genre = genreRepository
+                    .findByName(book.getGenre().getName())
+                    .orElseThrow(()-> new GenreException("Genre is not found in data base for the book"));
+        }
+
         book.setGenre(genre);
         bookRepository.save(book);
     }

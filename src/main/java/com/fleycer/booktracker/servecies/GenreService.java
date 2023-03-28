@@ -23,4 +23,9 @@ public class GenreService {
     public Optional<Genre> findByName(String name){
         return genreRepository.findByName(name);
     }
+
+    @Transactional
+    public void deleteGenre(Long id){
+        genreRepository.deleteById(id);
+    }
 }

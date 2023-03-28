@@ -18,10 +18,16 @@ public class Genre {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "genre")
+    @OneToMany(mappedBy = "genre", cascade = {CascadeType.MERGE,
+            CascadeType.PERSIST})
     private List<Book> books;
 
     public Genre(String name) {
         this.name = name;
+    }
+
+    @PreRemove
+    private void setGenreNull() {
+        books.forEach(b -> b.setGenre(null));
     }
 }
